@@ -1,0 +1,63 @@
+@startuml
+' ==========================================================
+' SEQUENCE DIAGRAM - COD CHECKOUT
+' E-Commerce Shopping Cart System
+' ==========================================================
+autonumber
+skinparam linetype ortho
+
+actor "Customer" as C
+participant "Browser (app.js)" as B
+participant "OrderController" as OC
+participant "OrderService" as OS
+participant "CartService" as CS
+participant "ProductRepository" as PR
+participant "OrderRepository" as OR
+database "MySQL" as DB
+
+C -> B : Click "Place Order"
+activate B
+
+B -> OC : POST /api/orders (JWT)
+activate OC
+
+OC -> OS : placeOrder(token, address)
+activate OS
+
+OS -> CS : getCartItems(userId)
+activate CS
+CS -> DB : SELECT cart
+DB --> CS : cart items
+CS --> OS : List<CartItem>
+deactivate CS
+
+loop For each cart item
+  OS -> PR : findById(productId)
+  activate PR
+  PR -> DB : SELECT product
+  DB --> PR : product + stock
+  PR --> OS : Product
+  deactivate PR
+end
+
+OS -> OS : Validate stock & compute total
+
+OS -> OR : save(Order)
+activate OR
+OR -> DB : INSERT orders
+DB --> OR : orderId
+OR --> OS : Order
+deactivate OR
+
+OS -> DB : INSERT order_items
+OS -> DB : DELETE cart (clear cart)
+
+OS --> OC : Order placed
+deactivate OS
+
+OC --> B : 200 OK (orderId)
+deactivate OC
+
+B --> C : Show "Order Placed Successfully"
+deactivate B
+@enduml

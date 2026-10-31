@@ -1,0 +1,36 @@
+@startuml
+' ==========================================================
+' ACTIVITY DIAGRAM - USER LOGIN
+' E-Commerce Shopping Cart System
+' ==========================================================
+start
+
+:Open Login Page;
+:Enter Email & Password;
+:Click "Login";
+
+if (Fields Valid?) then (yes)
+  if (Credentials Match\nDatabase?) then (yes)
+    #90EE90:Login Successful;
+    :Generate JWT Token;
+    :Store Token in localStorage;
+    :Redirect to Products Page;
+  else (no)
+    #FFB6C1:Invalid Credentials;
+    :Show Error Message;
+    stop
+  endif
+else (no)
+  #FFB6C1:Validation Error;
+  :Show "Enter valid details";
+  stop
+endif
+
+if (User Role = ADMIN?) then (yes)
+  :Redirect to Admin Dashboard;
+else (no)
+  :Redirect to Customer Home;
+endif
+
+stop
+@enduml

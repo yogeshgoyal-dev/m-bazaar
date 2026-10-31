@@ -1,0 +1,87 @@
+@startuml
+' ==========================================================
+' CLASS DIAGRAM
+' E-Commerce Shopping Cart System
+' ==========================================================
+skinparam linetype ortho
+
+class User {
+  -int userId
+  -String name
+  -String email
+  -String password
+  -String phone
+  -String role
+  -String address
+  -LocalDateTime createdAt
+  +register()
+  +login()
+  +updateProfile()
+  +getOrders()
+}
+
+class Category {
+  -int categoryId
+  -String categoryName
+  -String description
+  +getProducts()
+}
+
+class Product {
+  -int productId
+  -String productName
+  -String description
+  -BigDecimal price
+  -int stockQuantity
+  -String imageUrl
+  -String brand
+  -boolean isActive
+  -LocalDateTime createdAt
+  +getPrice()
+  +isAvailable()
+  +updateStock()
+}
+
+class Cart {
+  -int cartId
+  -int quantity
+  -LocalDateTime createdAt
+  +addItem()
+  +updateQuantity()
+  +removeItem()
+  +getTotal()
+}
+
+class CartItem {
+  -int cartItemId
+  -int quantity
+  +getLineTotal()
+}
+
+class Order {
+  -int orderId
+  -LocalDateTime orderDate
+  -BigDecimal totalAmount
+  -String status
+  -String paymentMethod
+  -String shippingAddress
+  +placeOrder()
+  +cancelOrder()
+  +getStatus()
+}
+
+class OrderItem {
+  -int orderItemId
+  -int quantity
+  -BigDecimal price
+  +getSubtotal()
+}
+
+User "1" --> "0..*" Cart : has
+User "1" --> "0..*" Order : places
+Category "1" --> "0..*" Product : contains
+Cart "1" *-- "1..*" CartItem : contains
+CartItem --> "1" Product : refers
+Order "1" *-- "1..*" OrderItem : contains
+OrderItem --> "1" Product : refers
+@enduml

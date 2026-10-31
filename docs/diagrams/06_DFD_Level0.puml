@@ -1,0 +1,18 @@
+@startuml
+' ==========================================================
+' DFD LEVEL 0 (CONTEXT DIAGRAM)
+' E-Commerce Shopping Cart System
+' ==========================================================
+skinparam linetype ortho
+
+actor "Customer" as Customer
+actor "Admin" as Admin
+
+rectangle "E-Commerce Shopping Cart System" as System
+
+Customer --> System : Registration Details\nLogin Credentials\nBrowse / Search Products\nAdd to Cart\nShipping Address\nCancel Order
+System --> Customer : Login Status\nProduct List\nCart Details\nOrder Confirmation\nOrder History
+
+Admin --> System : Add / Update / Delete Product\nManage Categories\nUpdate Order Status
+System --> Admin : Product List\nCategory List\nOrder List\nDashboard Data
+@enduml

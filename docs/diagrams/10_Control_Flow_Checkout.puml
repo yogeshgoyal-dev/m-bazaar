@@ -1,0 +1,62 @@
+@startuml
+' ==========================================================
+' CONTROL FLOW DIAGRAM - CART & COD CHECKOUT
+' E-Commerce Shopping Cart System
+' ==========================================================
+skinparam linetype ortho
+
+start
+:Open Cart Page;
+
+if (Cart Empty?) then (yes)
+  #FFB6C1:Show "Cart is Empty";
+  stop
+else (no)
+endif
+
+:Display Cart Items\n(Product, Price, Qty, Total);
+:Change Quantity / Remove Item;
+
+if (Update\nStock Available?) then (no)
+  #FFB6C1:Show "Insufficient Stock";
+  stop
+else (yes)
+endif
+
+:Proceed to Checkout;
+:Enter Shipping Address;
+:Select Payment Method = COD;
+
+if (Address Valid?) then (no)
+  #FFB6C1:Show "Enter valid address";
+  :Back to Checkout;
+  stop
+else (yes)
+endif
+
+:Calculate Grand Total;
+
+if (Confirm Order?) then (no)
+  :Back to Cart;
+  stop
+else (yes)
+endif
+
+:Create Order Record\n(status = PLACED);
+:Save Order Items;
+:Reduce Product Stock;
+:Clear Cart;
+
+#90EE90:Show "Order Placed Successfully\nPayment: Cash on Delivery";
+
+if (Want to Cancel?) then (yes)
+  :Open My Orders;
+  :Select Order;
+  :Cancel Order;
+  :Restock Items;
+  #FFF3B0:Show "Order Cancelled";
+else (no)
+endif
+
+stop
+@enduml

@@ -1,0 +1,77 @@
+@startuml
+' ==========================================================
+' DATABASE DESIGN DIAGRAM (ER)
+' E-Commerce Shopping Cart System
+' ==========================================================
+hide circle
+skinparam linetype ortho
+
+entity "USERS" as users {
+  * user_id : INT <<PK>>
+  --
+  name : VARCHAR(100)
+  email : VARCHAR(150) <<UK>>
+  password : VARCHAR(255)
+  phone : VARCHAR(15)
+  role : VARCHAR(20)
+  address : TEXT
+  created_at : DATETIME
+}
+
+entity "CATEGORIES" as categories {
+  * category_id : INT <<PK>>
+  --
+  category_name : VARCHAR(100)
+  description : VARCHAR(255)
+}
+
+entity "PRODUCTS" as products {
+  * product_id : INT <<PK>>
+  --
+  category_id : INT <<FK>>
+  product_name : VARCHAR(200)
+  description : TEXT
+  price : DECIMAL(10,2)
+  stock_quantity : INT
+  image_url : VARCHAR(500)
+  brand : VARCHAR(100)
+  is_active : BOOLEAN
+  created_at : DATETIME
+}
+
+entity "CART" as cart {
+  * cart_id : INT <<PK>>
+  --
+  user_id : INT <<FK>>
+  product_id : INT <<FK>>
+  quantity : INT
+  created_at : DATETIME
+}
+
+entity "ORDERS" as orders {
+  * order_id : INT <<PK>>
+  --
+  user_id : INT <<FK>>
+  order_date : DATETIME
+  total_amount : DECIMAL(10,2)
+  status : VARCHAR(30)
+  payment_method : VARCHAR(30)
+  shipping_address : TEXT
+}
+
+entity "ORDER_ITEMS" as order_items {
+  * order_item_id : INT <<PK>>
+  --
+  order_id : INT <<FK>>
+  product_id : INT <<FK>>
+  quantity : INT
+  price : DECIMAL(10,2)
+}
+
+users ||--o{ cart : "adds"
+users ||--o{ orders : "places"
+categories ||--o{ products : "contains"
+products ||--o{ cart : "in"
+orders ||--|{ order_items : "contains"
+products ||--o{ order_items : "ordered in"
+@enduml

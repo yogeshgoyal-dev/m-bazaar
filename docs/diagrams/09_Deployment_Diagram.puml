@@ -1,0 +1,32 @@
+@startuml
+' ==========================================================
+' DEPLOYMENT DIAGRAM
+' E-Commerce Shopping Cart System
+' ==========================================================
+skinparam linetype ortho
+
+node "Client Device" {
+  artifact "Web Browser"
+}
+
+node "Application Server\n(Tomcat 8080)" {
+  artifact "Spring Boot JAR\n(PinnacleMartApp)" as jar
+  artifact "REST API\n/api/**" as api
+  artifact "JWT Filter\nPassword Encoder" as sec
+}
+
+node "Database Server" {
+  database "MySQL 8\n(ecommerce_db)" as db
+}
+
+node "GitHub" {
+  artifact "Source Code\nRepository" as repo
+}
+
+"Web Browser" --> "api" : "HTTP/HTTPS\nJSON"
+"api" --> "jar" : calls
+"sec" --> "jar" : part of
+"jar" --> "db" : "JDBC\nport 3306"
+
+repo ..> "jar" : build & deploy
+@enduml

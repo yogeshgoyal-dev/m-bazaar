@@ -1,0 +1,35 @@
+@startuml
+' ==========================================================
+' SYSTEM ARCHITECTURE - 3 TIER
+' E-Commerce Shopping Cart System
+' ==========================================================
+skinparam linetype ortho
+
+package "PRESENTATION TIER (Client)" {
+  [HTML Pages\nindex.html\nproducts.html\ncart.html] as html
+  [CSS\nstyle.css] as css
+  [JavaScript\napp.js\napi.js] as js
+  [Browser UI] as browser
+}
+
+package "BUSINESS TIER (Spring Boot - REST API)" {
+  [Spring Boot\nApplication] as boot
+  [Controller Layer\nAuthController\nProductController\nCartController\nOrderController] as ctrl
+  [Service Layer\nAuthService\nProductService\nCartService\nOrderService] as svc
+  [Repository Layer\nJPA Repositories] as repo
+  [Security\nJWT Filter\nPassword Encode] as sec
+}
+
+package "DATA TIER (MySQL)" {
+  [MySQL Database\necommerce_db] as db
+}
+
+browser --> html
+html --> css
+html --> js
+js --> ctrl : "HTTP /api/**"
+ctrl --> svc
+svc --> repo
+svc --> sec
+repo --> db : "JDBC"
+@enduml
